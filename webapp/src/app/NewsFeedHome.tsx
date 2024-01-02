@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "./Loader";
+import NoDataComponent from "./NoData";
 
 const NewsFeedHome = () => {
   const [headlines, setHeadlines] = useState<any[]>([]);
@@ -12,7 +13,7 @@ const NewsFeedHome = () => {
       try {
         const url = "https://newsfeed-service.onrender.com/headlines/today";
         const response = await axios.get(url);
-        setHeadlines(response.data.headlines);
+        setHeadlines(response?.data?.headlines || []);
       } catch (error) {
         throw new Error(
           "Error fetching headlines: Please check your internet connection or try again later."
@@ -31,6 +32,8 @@ const NewsFeedHome = () => {
         <h2 className="text-center">
           <Loader />
         </h2>
+      ) : headlines.length === 0 ? (
+        <NoDataComponent />
       ) : (
         <>
           <h1 className="text-4xl font-bold mb-4 text-center">
